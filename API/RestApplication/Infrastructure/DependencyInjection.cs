@@ -53,11 +53,19 @@ namespace RestApplication.DependencyInjection
 
             // Add other services
             services.AddScoped<JwtTokenGenerator>();
+            services.AddScoped<EmailSender>();
 
             // Configuration objects
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.Configure<UserTypes>(configuration.GetSection("UserTypes"));
             services.Configure<ProjectPaths>(configuration.GetSection("ProjectPaths"));
+
+            // Configuration secrets
+            var configBuilder = new ConfigurationBuilder()
+                .AddJsonFile("./secret.json", optional: false, reloadOnChange: true);
+            var secretConfig = configBuilder.Build();
+
+            services.Configure<EmailCredentials>(secretConfig.GetSection("EmailCredentials"));
 
             // Add Authentication and Authorization
             services.AddAuth(configuration);
@@ -65,7 +73,7 @@ namespace RestApplication.DependencyInjection
             // Configure Entity Framework
             services.AddDbContext<Entities>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(secretConfig.GetConnectionString("DefaultConnection"));
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

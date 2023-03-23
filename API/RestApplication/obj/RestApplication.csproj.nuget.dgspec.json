@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Proiecte\\dotnet\\API\\RestApplication\\RestApplication.csproj": {}
+    "C:\\Proiecte\\StefanBeam\\backend\\API\\RestApplication\\RestApplication.csproj": {}
   },
   "projects": {
-    "C:\\Proiecte\\dotnet\\API\\RestApplication\\RestApplication.csproj": {
+    "C:\\Proiecte\\StefanBeam\\backend\\API\\RestApplication\\RestApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Proiecte\\dotnet\\API\\RestApplication\\RestApplication.csproj",
+        "projectUniqueName": "C:\\Proiecte\\StefanBeam\\backend\\API\\RestApplication\\RestApplication.csproj",
         "projectName": "RestApplication",
-        "projectPath": "C:\\Proiecte\\dotnet\\API\\RestApplication\\RestApplication.csproj",
+        "projectPath": "C:\\Proiecte\\StefanBeam\\backend\\API\\RestApplication\\RestApplication.csproj",
         "packagesPath": "C:\\Users\\stefa\\.nuget\\packages\\",
-        "outputPath": "C:\\Proiecte\\dotnet\\API\\RestApplication\\obj\\",
+        "outputPath": "C:\\Proiecte\\StefanBeam\\backend\\API\\RestApplication\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Visual Studio\\Shared\\NuGetPackages"
@@ -74,6 +74,10 @@
             "Microsoft.Extensions.Identity.Core": {
               "target": "Package",
               "version": "[7.0.3, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.28.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
