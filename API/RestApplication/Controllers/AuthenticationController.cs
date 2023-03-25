@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using RestApplication.Infrastructure;
 using RestApplication.Models.AppUser;
 using RestApplication.Services;
@@ -36,7 +38,7 @@ namespace RestApplication.Controllers
             // cookie options
             this.ckOpt = new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Secure = true,
                 SameSite = SameSiteMode.None
             };
@@ -85,6 +87,7 @@ namespace RestApplication.Controllers
 
             return Ok();
         }
+
 
         [HttpPost("/api/auth/login")]
         public async Task<IActionResult> Login([FromBody] AppUserLoginCredentialsModel userCredentials)
@@ -143,6 +146,30 @@ namespace RestApplication.Controllers
             await accesTokenService.AddToken(accesToken);
 
 
+            return Ok();
+        }
+
+
+        [HttpPost("/api/auth/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var cookies = Request.Cookies.ToList();
+            foreach (var cookie in cookies)
+            {
+                try
+                {
+                    if (cookie.Key == "Refresh-Token")
+                    {
+                        await accesTokenService.DeleteTokenByRefreshToken(cookie.Value);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    continue;
+                }
+            }
+            Response.Cookies.Append("RestApp-Token", "", ckOpt);
+            Response.Cookies.Append("Refresh-Token", "", ckOpt);
             return Ok();
         }
 
