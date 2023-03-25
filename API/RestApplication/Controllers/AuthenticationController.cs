@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RestApplication.Infrastructure;
 using RestApplication.Models.AppUser;
 using RestApplication.Services;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 
@@ -16,6 +18,7 @@ namespace RestApplication.Controllers
         private readonly JwtTokenGenerator jwtTokenGenerator;
         private readonly EmailSender emailSender;
         private readonly UserType userType;
+        private readonly CookieOptions ckOpt;
 
         public AuthenticationController(
             AppUserService appUserService,
@@ -29,9 +32,19 @@ namespace RestApplication.Controllers
             this.jwtTokenGenerator = jwtTokenGenerator;
             this.emailSender = emailSender;
             this.userType = userType.Value;
+
+            // cookie options
+            this.ckOpt = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            };
         }
 
+
         [HttpPost("/api/auth/register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] AppUserRegisterCredentialsModel userCredentials)
         {
             string firstName = userCredentials.firstName;
@@ -44,7 +57,7 @@ namespace RestApplication.Controllers
 
             var appUser = await service.GetAppUserByEmail(email);
             if (appUser != null)
-                return BadRequest(StatusCodes.Status409Conflict);
+                return StatusCode(409);
 
             password = BCrypt.Net.BCrypt.HashPassword(password, 12); // remember to *Salt* later
             AppUserModel appUserToAdd = new AppUserModel();
@@ -55,7 +68,7 @@ namespace RestApplication.Controllers
 
             if (await service.AddAppUser(appUserToAdd) != true)
             {
-                return BadRequest(StatusCodes.Status500InternalServerError);
+                return StatusCode(500);
             }
 
             // TODO: Send email here
@@ -120,11 +133,11 @@ namespace RestApplication.Controllers
 
             // give the user a token based on his Identity
             string token = jwtTokenGenerator.GenerateToken(claimsIdentity);
-            Response.Cookies.Append("RestApp-Token", token);
+            Response.Cookies.Append("RestApp-Token", token, ckOpt);
 
             // give the user a refresh token
             var accesToken = jwtTokenGenerator.GetAccesToken(token);
-            Response.Cookies.Append("Refresh-Token", accesToken.refreshToken);
+            Response.Cookies.Append("Refresh-Token", accesToken.refreshToken, ckOpt);
 
             // add the accesToken in the database
             await accesTokenService.AddToken(accesToken);
@@ -208,7 +221,7 @@ namespace RestApplication.Controllers
 
             if (await service.UpdateAppUser(appUser) != true)
             {
-                return BadRequest(StatusCodes.Status500InternalServerError);
+                return StatusCode(500);
             }
 
             try
@@ -250,7 +263,7 @@ namespace RestApplication.Controllers
 
             if (await service.UpdateAppUser(appUser) != true)
             {
-                return BadRequest(StatusCodes.Status500InternalServerError);
+                return StatusCode(500);
             }
 
             return Ok();
@@ -301,14 +314,45 @@ namespace RestApplication.Controllers
             await accesTokenService.UpdateToken(accesToken);
 
             // append new cookies
-            Response.Cookies.Append("RestApp-Token", accesToken.accesToken);
-            Response.Cookies.Append("Refresh-Token", accesToken.refreshToken);
+            Response.Cookies.Append("RestApp-Token", accesToken.accesToken, ckOpt);
+            Response.Cookies.Append("Refresh-Token", accesToken.refreshToken, ckOpt);
 
             return Ok();
         }
 
 
+        [HttpGet("/api/auth/getEmailFromCookie")]
+        public async Task<IActionResult> GetEmailFromCookie()
+        {
+            var cookies = Request.Cookies.ToList();
+            string? jwtToken = null;
 
+            foreach (var cookie in cookies)
+            {
+                try
+                {
+                    if (cookie.Key == "RestApp-Token")
+                    {
+                        jwtToken = cookie.Value;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    continue;
+                }
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.ReadJwtToken(jwtToken);
+            List<Claim> claims = token.Claims.ToList();
+
+            foreach (var claim in claims)
+            {
+                if (claim.Type == "Email")
+                    return Ok(claim.Value);
+            }
+            return NotFound();
+        }
 
 
 

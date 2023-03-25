@@ -70,6 +70,21 @@ namespace RestApplication.DependencyInjection
             // Add Authentication and Authorization
             services.AddAuth(configuration);
 
+            // Add CORS
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.SetIsOriginAllowed(origin =>
+                            new Uri(origin).Host == "localhost"
+                        );
+                        policy.AllowAnyHeader();
+                        policy.AllowAnyMethod();
+                        policy.AllowCredentials();
+                    });
+            });
+
             // Configure Entity Framework
             services.AddDbContext<Entities>(options =>
             {
