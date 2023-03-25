@@ -119,19 +119,9 @@ namespace RestApplication.Controllers
             ClaimsIdentity claimsIdentity = this.CreateClaimsIdentity(appUser);
 
             // delete the acces token in the database that the user may have from the past
-            var cookies = Request.Cookies.ToList();
-            foreach (var cookie in cookies)
+            if (Request.Cookies["Refresh-Token"] != null)
             {
-                try
-                {
-                    if (cookie.Key == "Refresh-Token")
-                    {
-                        await accesTokenService.DeleteTokenByRefreshToken(cookie.Value);
-                    }
-                } catch(Exception ex)
-                {
-                    continue;
-                }
+                await accesTokenService.DeleteTokenByRefreshToken(Request.Cookies["Refresh-Token"]);
             }
 
             // give the user a token based on his Identity
@@ -153,23 +143,18 @@ namespace RestApplication.Controllers
         [HttpPost("/api/auth/logout")]
         public async Task<IActionResult> Logout()
         {
-            var cookies = Request.Cookies.ToList();
-            foreach (var cookie in cookies)
+            if (Request.Cookies["RestApp-Token"] != null)
             {
-                try
-                {
-                    if (cookie.Key == "Refresh-Token")
-                    {
-                        await accesTokenService.DeleteTokenByRefreshToken(cookie.Value);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    continue;
-                }
+                await accesTokenService.DeleteTokenByRefreshToken(Request.Cookies["Refresh-Token"]);
             }
-            Response.Cookies.Append("RestApp-Token", "", ckOpt);
-            Response.Cookies.Append("Refresh-Token", "", ckOpt);
+
+            // Set the cookies to expire
+            var ckOptExp = ckOpt;
+            ckOptExp.Expires = DateTime.UtcNow.AddDays(-1);
+
+            Response.Cookies.Append("RestApp-Token", "", ckOptExp);
+            Response.Cookies.Append("Refresh-Token", "", ckOptExp);
+
             return Ok();
         }
 
@@ -306,23 +291,14 @@ namespace RestApplication.Controllers
             string? refreshToken = null;
             string? jwtToken = null;
 
-            foreach (var cookie in cookies)
+            if (Request.Cookies["Refresh-Token"] != null)
             {
-                try
-                {
-                    if (cookie.Key == "Refresh-Token")
-                    {
-                        refreshToken = cookie.Value;
-                    }
-                    if (cookie.Key == "RestApp-Token")
-                    {
-                        jwtToken = cookie.Value;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    continue;
-                }
+                refreshToken = Request.Cookies["Refresh-Token"];
+            }
+
+            if (Request.Cookies["RestApp-Token"] != null)
+            {
+                jwtToken = Request.Cookies["RestApp-Token"];
             }
 
             // check if cookies were found
@@ -354,19 +330,9 @@ namespace RestApplication.Controllers
             var cookies = Request.Cookies.ToList();
             string? jwtToken = null;
 
-            foreach (var cookie in cookies)
+            if (Request.Cookies["RestApp-Token"] != null)
             {
-                try
-                {
-                    if (cookie.Key == "RestApp-Token")
-                    {
-                        jwtToken = cookie.Value;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    continue;
-                }
+                jwtToken = Request.Cookies["RestApp-Token"];
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
