@@ -21,7 +21,7 @@ namespace RestApplication.Repositories
             {
                 string name = product.name;
 
-                var prod = dbContext.products.Where(u => u.name == name).FirstOrDefault();
+                var prod = await dbContext.products.Where(u => u.name == name).FirstAsync();
 
                 string sameName = null;
 
@@ -97,7 +97,7 @@ namespace RestApplication.Repositories
                 if (sameName != null)
                     return false;
 
-                dbContext.Update(product);
+                dbContext.products.Update(product);
                 await dbContext.SaveChangesAsync();
                 return true;
             }

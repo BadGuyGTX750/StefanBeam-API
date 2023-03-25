@@ -74,7 +74,7 @@ namespace RestApplication.Repositories
         {
             try
             {
-                dbContext.Update(photo);
+                dbContext.photoAttachments.Update(photo);
                 await dbContext.SaveChangesAsync();
                 return true;
             }
