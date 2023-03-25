@@ -1,0 +1,7 @@
+API/RestApplication/secret.json
+API/.vs
+API/RestApplication/obj
+API/RestApplication/bin
+API/RestApplication/Data/Migrations
+API/RestApplication/secret.Development.json
+API/RestApplication/appsettings.Development.json
