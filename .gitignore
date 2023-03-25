@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+API/RestApplication/secret.json
+=======
+API/RestApplication/secret.json
+API/.vs
+API/RestApplication/obj
+API/RestApplication/bin
+API/RestApplication/Data/Migrations
+API/RestApplication/secret.Development.json
+API/RestApplication/appsettings.Development.json
+>>>>>>> a816ba52003f9b70c541f4702119259a96d75331
