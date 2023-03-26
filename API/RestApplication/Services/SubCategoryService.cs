@@ -32,12 +32,6 @@ namespace RestApplication.Repositories
         }
 
 
-        public async Task<bool> AssignToMiddleCategory(SubCategoryModel subCategory, MiddleCategoryModel middleCategory)
-        {
-            return await repository.AssignToMiddleCategory(subCategory, middleCategory);
-        }
-
-
         public async Task<bool> DeleteSubCategoryById(Guid id)
         {
             return await repository.DeleteSubCategoryById(id);

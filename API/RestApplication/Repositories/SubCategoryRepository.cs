@@ -67,35 +67,6 @@ namespace RestApplication.Repositories
         }
 
 
-        public async Task<List<SubCategoryModel>> GetSubCategoriesByMiddleCategoryName(string name)
-        {
-            try
-            {
-                return await dbContext.subCategories.Where(u => u.parentCategoryName == name).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
-
-        public async Task<bool> AssignToMiddleCategory(SubCategoryModel subCategory, MiddleCategoryModel middleCategory)
-        {
-            try
-            {
-                Guid parentId = middleCategory.id;
-                subCategory.parentCategoryId = parentId;
-                dbContext.subCategories.Update(subCategory);
-                await dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
         public async Task<bool> DeleteSubCategoryById(Guid id)
         {
             try

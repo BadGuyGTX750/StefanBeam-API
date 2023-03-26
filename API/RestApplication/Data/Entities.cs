@@ -15,10 +15,6 @@ namespace RestApplication.Data
 
         public DbSet<AppUserModel> appUsers { get; set; }
 
-        public DbSet<TopCategoryModel> topCategories { get; set; }
-
-        public DbSet<MiddleCategoryModel> middleCategories { get; set; }
-
         public DbSet<SubCategoryModel> subCategories { get; set; }
 
         public DbSet<ProductModel> products { get; set; }
@@ -34,16 +30,6 @@ namespace RestApplication.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TopCategoryModel>()
-                .HasMany(u => u.middleCategories)
-                .WithOne(u => u.topCategory)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<MiddleCategoryModel>()
-                .HasMany(u => u.subCategories)
-                .WithOne(u => u.middleCategory)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<SubCategoryModel>()
                 .HasMany(u => u.products)
                 .WithOne(u => u.subCategory)

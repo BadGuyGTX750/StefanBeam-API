@@ -89,7 +89,7 @@ namespace RestApplication.Controllers
         }
 
 
-        [HttpDelete("/api/photoAttachment/upload")]
+        [HttpDelete("/api/photoAttachment/delete")]
         public async Task<IActionResult> DeletePhotoById([FromQuery] Guid id)
         {
             if (id == Guid.Empty)

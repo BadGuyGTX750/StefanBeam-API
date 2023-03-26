@@ -28,8 +28,6 @@ namespace RestApplication.DependencyInjection
         {
             // Add services
             services.AddScoped<AppUserService>();
-            services.AddScoped<TopCategoryService>();
-            services.AddScoped<MiddleCategoryService>();
             services.AddScoped<SubCategoryService>();
             services.AddScoped<ProductService>();
             services.AddScoped<WeightPriceService>();
@@ -39,8 +37,6 @@ namespace RestApplication.DependencyInjection
 
             // Add repositories
             services.AddScoped<AppUserRepository>();
-            services.AddScoped<TopCategoryRepository>();
-            services.AddScoped<MiddleCategoryRepository>();
             services.AddScoped<SubCategoryRepository>();
             services.AddScoped<ProductRepository>();
             services.AddScoped<WeightPriceRepository>();

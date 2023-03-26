@@ -7,16 +7,13 @@ namespace RestApplication.Controllers
     public class SubCategoryController : Controller
     {
         private readonly SubCategoryService service;
-        private readonly MiddleCategoryService middleCategoryService;
 
 
         public SubCategoryController(
-            SubCategoryService service,
-            MiddleCategoryService middleCategoryService
+            SubCategoryService service
             )
         {
             this.service = service;
-            this.middleCategoryService = middleCategoryService;
         }
 
 
@@ -24,13 +21,9 @@ namespace RestApplication.Controllers
         public async Task<IActionResult> AddSubCategory([FromBody] SubCategoryModel category)
         {
             var name = category.name;
-            var parentCategoryName = category.parentCategoryName;
 
             // check if any of the required parameters are null
             if (name == null)
-                return BadRequest();
-
-            if (parentCategoryName == null)
                 return BadRequest();
 
             // check if a category with the same name already exists
@@ -38,16 +31,9 @@ namespace RestApplication.Controllers
             if (category_ != null)
                 return BadRequest();
 
-            // check if it exists a parent category
-            var parentCategory = await middleCategoryService.GetMiddleCategoryByName(parentCategoryName);
-            if (parentCategory == null)
-                return BadRequest();
-
             // create the new category
             var categoryToAdd = new SubCategoryModel();
             categoryToAdd.name = category.name;
-            categoryToAdd.parentCategoryId = parentCategory.id;
-            categoryToAdd.parentCategoryName = parentCategoryName;
 
             // add the new category
             if (!await service.AddSubCategory(categoryToAdd))

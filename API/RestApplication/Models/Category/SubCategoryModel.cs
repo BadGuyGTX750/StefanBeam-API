@@ -12,19 +12,8 @@ namespace RestApplication.Models.Category
         [Required]
         public Guid id { get; set; }
 
-        [Required]
-        [ForeignKey("middleCategory")]
-        [JsonIgnore]
-        public Guid parentCategoryId { get; set; }
-
-        [JsonIgnore]
-        public MiddleCategoryModel middleCategory { get; set; }
-
         [JsonIgnore]
         public List<ProductModel> products { get; set; }
-
-        [Required]
-        public string parentCategoryName { get; set; } = null;
 
         [Required]
         public string name { get; set; }
