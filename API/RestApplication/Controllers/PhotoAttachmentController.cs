@@ -52,7 +52,7 @@ namespace RestApplication.Controllers
 
             // Compose the serverFolderName by getting the appropiate parameters togheter
             string tmp = projectPaths.ProductImagesPath;
-            string fileName = Guid.NewGuid().ToString() + "_" + file.name + extension;
+            string fileName = file.name + extension;
             tmp += "\\" + fileName;
             string serverFolderName = Path.Combine(webHostEnvironment.ContentRootPath, tmp);
 

@@ -58,7 +58,7 @@ namespace RestApplication.Controllers
 
             if (!await service.AddProduct(productToAdd))
             {
-                return StatusCode(500);
+                return StatusCode(409);
             }
 
             return Ok();
