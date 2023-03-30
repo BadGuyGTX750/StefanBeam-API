@@ -40,7 +40,7 @@ namespace RestApplication.Controllers
             if (await service.GetProductByName(name) != null)
                 return BadRequest();
 
-            // check if the mentioned category exists
+            // check if the mentioned categories exists
             var subCategory = await subCategoryService.GetSubCategoryByName(categoryName);
             if (subCategory == null)
                 return BadRequest();
@@ -50,7 +50,7 @@ namespace RestApplication.Controllers
             productToAdd.name = name;
             productToAdd.shortDescr = shortDescr;
             productToAdd.longDescr = longDescr;
-            productToAdd.parentCategoryId = subCategory.id;
+            //productToAdd.parentCategoryIds = subCategoryIds;
             productToAdd.categoryName = categoryName;
             productToAdd.weight_price = weight_price;
             productToAdd.flavor_quantity = flavor_quantity;

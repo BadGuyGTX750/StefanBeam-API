@@ -46,7 +46,7 @@ namespace RestApplication.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ProductModel>()
-                .HasMany(u => u.photoAttachments)
+                .HasOne(u => u.photoAttachment)
                 .WithOne(u => u.product)
                 .OnDelete(DeleteBehavior.Cascade);
         }

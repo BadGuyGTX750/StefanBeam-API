@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Images\" />
-    <Folder Include="Data\Migrations\" />
     <Folder Include="Filters\" />
   </ItemGroup>
 

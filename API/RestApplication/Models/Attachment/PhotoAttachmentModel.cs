@@ -14,10 +14,11 @@ namespace RestApplication.Models.Attachment
         [Required]
         public string name { get; set; }
 
+        [JsonIgnore]
         [ForeignKey("product")]
-        [Required]
         public Guid? parentProductId { get; set; }
 
+        [JsonIgnore]
         [Required]
         public ProductModel product { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using RestApplication.Models.Attachment;
 using RestApplication.Models.Category;
@@ -22,18 +23,19 @@ namespace RestApplication.Models.Product
         [Required]
         public string longDescr { get; set; }
 
-        [Required]
-        [ForeignKey("subCategory")]
         [JsonIgnore]
-        public Guid parentCategoryId { get; set; }
+        [ForeignKey("subCategory")]
+        [Required]
+        public Guid subCategoryId { get; set; }
 
         [JsonIgnore]
         public SubCategoryModel subCategory { get; set; }
 
+        [Required]
         public string categoryName { get; set; }
 
         [JsonIgnore]
-        public List<PhotoAttachmentModel> photoAttachments { get; set; }
+        public PhotoAttachmentModel photoAttachment { get; set; }
 
         [Required]
         public List<WeightPriceModel> weight_price { get; set; }

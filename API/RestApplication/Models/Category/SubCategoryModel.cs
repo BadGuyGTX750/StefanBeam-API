@@ -16,6 +16,9 @@ namespace RestApplication.Models.Category
         public List<ProductModel> products { get; set; }
 
         [Required]
+        public string? parentCategoryName { get; set; }
+
+        [Required]
         public string name { get; set; }
     }
 }
