@@ -23,5 +23,9 @@ namespace RestApplication.Models.Product
 
         [JsonIgnore]
         public ProductModel product { get; set; }
+
+        [JsonIgnore]
+        [Required]
+        public string productName { get; set; }
     }
 }

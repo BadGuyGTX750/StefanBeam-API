@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Polly;
 using RestApplication.Models.Product;
 using RestApplication.Repositories;
 
@@ -23,6 +24,12 @@ namespace RestApplication.Services
         public async Task<List<WeightPriceModel>> GetByProductId(Guid id)
         {
             return await repository.GetByProductId(id);
+        }
+
+
+        public async Task<List<WeightPriceModel>> GetByProductName(string productName)
+        {
+            return await repository.GetByProductName(productName);
         }
 
 

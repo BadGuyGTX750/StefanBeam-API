@@ -1,4 +1,5 @@
-﻿using RestApplication.Models.Product;
+﻿using Microsoft.EntityFrameworkCore;
+using RestApplication.Models.Product;
 using RestApplication.Repositories;
 
 namespace RestApplication.Services
@@ -23,6 +24,12 @@ namespace RestApplication.Services
         public async Task<List<FlavorQuantityModel>> GetByProductId(Guid id)
         {
             return await repository.GetByProductId(id);
+        }
+
+
+        public async Task<List<FlavorQuantityModel>> GetByProductName(string productName)
+        {
+            return await repository.GetByProductName(productName);
         }
 
 

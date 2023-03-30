@@ -13,17 +13,23 @@ namespace RestApplication.Controllers
         private readonly ProductService service;
         private readonly SubCategoryService subCategoryService;
         private readonly PhotoAttachmentService photoAttachmentService;
+        private readonly WeightPriceService weightPriceService;
+        private readonly FlavorQuantityService flavorQuantityService;
 
 
         public ProductController(
             ProductService service,
             SubCategoryService subCategoryService,
-            PhotoAttachmentService photoAttachmentService
+            PhotoAttachmentService photoAttachmentService,
+            WeightPriceService weightPriceService,
+            FlavorQuantityService flavorQuantityService
             )
         {
             this.service = service;
             this.subCategoryService = subCategoryService;
             this.photoAttachmentService = photoAttachmentService;
+            this.weightPriceService = weightPriceService;
+            this.flavorQuantityService = flavorQuantityService;
         }
 
 
@@ -51,6 +57,18 @@ namespace RestApplication.Controllers
             var subCategory = await subCategoryService.GetSubCategoryByName(categoryName);
             if (subCategory == null)
                 return BadRequest();
+
+            // set names for the below objects
+            // (it will be easier to search these objects by product name in the database)
+            foreach (var item in weight_price)
+            {
+                item.productName = name;
+            }
+
+            foreach (var item in flavor_quantity)
+            {
+                item.productName = name;
+            }
 
             ProductModel productToAdd = new ProductModel();
 
@@ -84,6 +102,36 @@ namespace RestApplication.Controllers
                 return NotFound();
 
             return Ok(prods);
+        }
+
+
+        [HttpGet("/api/product/getWeightPricesByProductName")]
+        public async Task<IActionResult> GetWeightPricesByProductName([FromQuery] string productName)
+        {
+            if (productName == null)
+                return BadRequest();
+
+            var wps = await weightPriceService.GetByProductName(productName);
+
+            if (wps == null || !wps.Any())
+                return NotFound();
+
+            return Ok(wps);
+        }
+
+
+        [HttpGet("/api/product/getFlavorQuantitiesByProductName")]
+        public async Task<IActionResult> GetFlavorQuantitiesByProductName([FromQuery] string productName)
+        {
+            if (productName == null)
+                return BadRequest();
+
+            var fqs = await flavorQuantityService.GetByProductName(productName);
+
+            if (fqs == null || !fqs.Any())
+                return NotFound();
+
+            return Ok(fqs);
         }
 
 

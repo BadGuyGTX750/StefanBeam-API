@@ -40,6 +40,19 @@ namespace RestApplication.Repositories
         }
 
 
+        public async Task<List<FlavorQuantityModel>> GetByProductName(string productName)
+        {
+            try
+            {
+                return await dbContext.flavorQuantities.Where(u => u.productName == productName).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<bool> DeleteById(Guid id)
         {
             try
