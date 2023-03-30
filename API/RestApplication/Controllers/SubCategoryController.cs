@@ -59,7 +59,7 @@ namespace RestApplication.Controllers
         }
 
 
-        [HttpGet("/api/subCategory/get")]
+        [HttpGet("/api/subCategory/getByName")]
         public async Task<IActionResult> GetSubCategoryByName([FromQuery] string name)
         {
             if (name == null)
@@ -70,6 +70,21 @@ namespace RestApplication.Controllers
             if (subc == null)
                 return NotFound();
             
+            return Ok(subc);
+        }
+
+
+        [HttpGet("/api/subCategory/getByParentName")]
+        public async Task<IActionResult> GetSubCategoryByParentName([FromQuery] string parentName)
+        {
+            if (parentName == null)
+                return BadRequest();
+
+            var subc = await service.GetSubCategoryByParentName(parentName);
+
+            if (subc == null || !subc.Any())
+                return NotFound();
+
             return Ok(subc);
         }
 

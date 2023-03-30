@@ -1,4 +1,5 @@
-﻿using RestApplication.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RestApplication.Data;
 using RestApplication.Models.Category;
 
 namespace RestApplication.Repositories
@@ -29,6 +30,12 @@ namespace RestApplication.Repositories
         public async Task<SubCategoryModel> GetSubCategoryByName(string name)
         {
             return await repository.GetSubCategoryByName(name);
+        }
+
+
+        public async Task<List<SubCategoryModel>> GetSubCategoryByParentName(string parentName)
+        {
+            return await repository.GetSubCategoryByParentName(parentName);
         }
 
 

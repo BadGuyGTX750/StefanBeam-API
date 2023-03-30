@@ -67,6 +67,19 @@ namespace RestApplication.Repositories
         }
 
 
+        public async Task<List<SubCategoryModel>> GetSubCategoryByParentName(string parentName)
+        {
+            try
+            {
+                return await dbContext.subCategories.Where(u => u.parentCategoryName == parentName).ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<bool> DeleteSubCategoryById(Guid id)
         {
             try
