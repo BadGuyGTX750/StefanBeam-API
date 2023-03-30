@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Server.IIS.Core;
 using RestApplication.Models.Product;
 using RestApplication.Repositories;
 using RestApplication.Services;
+using System.Runtime.CompilerServices;
+using System.IO;
 
 namespace RestApplication.Controllers
 {
@@ -10,13 +12,18 @@ namespace RestApplication.Controllers
     {
         private readonly ProductService service;
         private readonly SubCategoryService subCategoryService;
+        private readonly PhotoAttachmentService photoAttachmentService;
 
 
-        public ProductController(ProductService service,
-            SubCategoryService subCategoryService)
+        public ProductController(
+            ProductService service,
+            SubCategoryService subCategoryService,
+            PhotoAttachmentService photoAttachmentService
+            )
         {
             this.service = service;
             this.subCategoryService = subCategoryService;
+            this.photoAttachmentService = photoAttachmentService;
         }
 
 
@@ -72,8 +79,9 @@ namespace RestApplication.Controllers
             if (name == null)
                 return BadRequest();
 
-            // chekc if a it exists an instance with this name
+            // check if a it exists an instance with this name
             var inst = await service.GetProductByName(name);
+            var photo = await photoAttachmentService.GetPhotoByProductName(name);
             if (inst == null)
                 return NotFound();
 
@@ -82,6 +90,9 @@ namespace RestApplication.Controllers
             {
                 return StatusCode(500);
             }
+
+            if (photo != null)
+                this.DeleteProductAssociatedPhoto(photo.filePath);
 
             return Ok();
         }
@@ -102,6 +113,14 @@ namespace RestApplication.Controllers
                 return false;
 
             return true;
+        }
+
+
+        private void DeleteProductAssociatedPhoto(string path)
+        {
+            // Delete the photo on the server if it exists
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
         }
     }
 }

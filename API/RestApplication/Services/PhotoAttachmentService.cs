@@ -35,9 +35,9 @@ namespace RestApplication.Services
         }
 
 
-        public async Task<List<PhotoAttachmentModel>> GetAllByProductName(string name)
+        public async Task<PhotoAttachmentModel> GetPhotoByProductName(string name)
         {
-            return await repository.GetAllByProductName(name);
+            return await repository.GetPhotoByProductName(name);
         }
 
 

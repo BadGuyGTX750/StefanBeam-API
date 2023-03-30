@@ -31,7 +31,7 @@ namespace RestApplication.Repositories
                 if (sameName != null)
                     return false;
 
-                await dbContext.AddAsync(product);
+                await dbContext.products.AddAsync(product);
                 await dbContext.SaveChangesAsync();
                 return true;
             }

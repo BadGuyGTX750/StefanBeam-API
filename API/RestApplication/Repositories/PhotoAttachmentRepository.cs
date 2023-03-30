@@ -20,7 +20,7 @@ namespace RestApplication.Repositories
         {
             try
             {
-                await dbContext.AddAsync(photo);
+                await dbContext.photoAttachments.AddAsync(photo);
                 await dbContext.SaveChangesAsync();
                 return true;
             }
@@ -57,11 +57,11 @@ namespace RestApplication.Repositories
         }
 
 
-        public async Task<List<PhotoAttachmentModel>> GetAllByProductName(string name)
+        public async Task<PhotoAttachmentModel> GetPhotoByProductName(string name)
         {
             try
             {
-                return await dbContext.photoAttachments.Where(u => u.productName == name).ToListAsync();
+                return await dbContext.photoAttachments.Where(u => u.productName == name).FirstAsync();
             }
             catch (Exception ex)
             {
