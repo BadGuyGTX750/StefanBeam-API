@@ -15,7 +15,6 @@ namespace RestApplication.Models.Category
         [JsonIgnore]
         public List<ProductModel> products { get; set; }
 
-        [Required]
         public string? parentCategoryName { get; set; }
 
         [Required]

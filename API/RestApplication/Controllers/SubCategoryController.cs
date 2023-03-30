@@ -21,6 +21,7 @@ namespace RestApplication.Controllers
         public async Task<IActionResult> AddSubCategory([FromBody] SubCategoryModel category)
         {
             var name = category.name;
+            var parentName = category.parentCategoryName;
 
             // check if any of the required parameters are null
             if (name == null)
@@ -31,9 +32,22 @@ namespace RestApplication.Controllers
             if (category_ != null)
                 return BadRequest();
 
+            // check if the parent category exists
+            if (!(parentName == "string" || parentName == "" || parentName == null))
+            {
+                var pCateg = await service.GetSubCategoryByName(parentName);
+                if (pCateg == null)
+                    return BadRequest("No such parent category");
+            }
+            
+
             // create the new category
             var categoryToAdd = new SubCategoryModel();
             categoryToAdd.name = category.name;
+            if (parentName == "string" || parentName == "" || parentName == null)
+                categoryToAdd.parentCategoryName = null;
+            else
+                categoryToAdd.parentCategoryName = parentName;
 
             // add the new category
             if (!await service.AddSubCategory(categoryToAdd))

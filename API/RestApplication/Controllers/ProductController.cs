@@ -50,7 +50,7 @@ namespace RestApplication.Controllers
             productToAdd.name = name;
             productToAdd.shortDescr = shortDescr;
             productToAdd.longDescr = longDescr;
-            //productToAdd.parentCategoryIds = subCategoryIds;
+            productToAdd.subCategoryId = subCategory.id;
             productToAdd.categoryName = categoryName;
             productToAdd.weight_price = weight_price;
             productToAdd.flavor_quantity = flavor_quantity;
