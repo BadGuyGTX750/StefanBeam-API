@@ -72,6 +72,21 @@ namespace RestApplication.Controllers
         }
 
 
+        [HttpGet("/api/product/getByCategoryName")]
+        public async Task<IActionResult> GetBySubCategoryName([FromQuery] string categoryName)
+        {
+            if (categoryName == null)
+                return BadRequest();
+
+            var prods = await service.GetByCategoryName(categoryName);
+
+            if (prods == null || !prods.Any())
+                return NotFound();
+
+            return Ok(prods);
+        }
+
+
         [HttpDelete("/api/product/delete")]
         public async Task<IActionResult> DeleteProductByName([FromQuery] string name)
         {
