@@ -62,11 +62,14 @@ namespace RestApplication.Controllers
             }
 
             // update the parent category to have isBotom to false from earlier
-            if (!await service.UpdateSubCategory(pCategS))
+            if (pCategS.id != Guid.Empty)
             {
-                return StatusCode(500);
+                if (!await service.UpdateSubCategory(pCategS))
+                {
+                    return StatusCode(500);
+                }
             }
-
+            
             return Ok();
         }
 
