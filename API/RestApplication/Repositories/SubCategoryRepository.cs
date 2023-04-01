@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestApplication.Data;
+using RestApplication.Models.AppUser;
 using RestApplication.Models.Category;
 
 namespace RestApplication.Repositories
@@ -76,6 +77,21 @@ namespace RestApplication.Repositories
             catch(Exception ex)
             {
                 return null;
+            }
+        }
+
+
+        public async Task<bool> UpdateSubCategory(SubCategoryModel subCategory)
+        {
+            try
+            {
+                dbContext.subCategories.Update(subCategory);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
 

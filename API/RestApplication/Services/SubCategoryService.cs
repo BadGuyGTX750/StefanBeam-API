@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Polly;
 using RestApplication.Data;
 using RestApplication.Models.Category;
 
@@ -36,6 +37,12 @@ namespace RestApplication.Repositories
         public async Task<List<SubCategoryModel>> GetSubCategoryByParentName(string parentName)
         {
             return await repository.GetSubCategoryByParentName(parentName);
+        }
+
+
+        public async Task<bool> UpdateSubCategory(SubCategoryModel subCategory)
+        {
+            return await repository.UpdateSubCategory(subCategory);
         }
 
 

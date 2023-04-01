@@ -32,12 +32,18 @@ namespace RestApplication.Controllers
             if (category_ != null)
                 return BadRequest();
 
+
+            var pCategS = new SubCategoryModel();
             // check if the parent category exists
             if (!(parentName == "string" || parentName == "" || parentName == null))
             {
                 var pCateg = await service.GetSubCategoryByName(parentName);
                 if (pCateg == null)
                     return BadRequest("No such parent category");
+
+                // mark the isBottom property as false
+                pCategS = pCateg;
+                pCategS.isBottom = false;
             }
             
 
@@ -51,6 +57,12 @@ namespace RestApplication.Controllers
 
             // add the new category
             if (!await service.AddSubCategory(categoryToAdd))
+            {
+                return StatusCode(500);
+            }
+
+            // update the parent category to have isBotom to false from earlier
+            if (!await service.UpdateSubCategory(pCategS))
             {
                 return StatusCode(500);
             }
@@ -102,10 +114,20 @@ namespace RestApplication.Controllers
             if (inst == null)
                 return NotFound();
 
+            var parentName = inst.parentCategoryName;
+
             // restricted deletion
             if (!await service.DeleteSubCategoryByName(name))
             {
                 return StatusCode(500);
+            }
+
+            var categs = await service.GetSubCategoryByParentName(parentName);
+            if (categs == null || !categs.Any())
+            {
+                var parentCateg = await service.GetSubCategoryByName(parentName);
+                parentCateg.isBottom = true;
+                await service.UpdateSubCategory(parentCateg);
             }
 
             return Ok();

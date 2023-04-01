@@ -19,5 +19,8 @@ namespace RestApplication.Models.Category
 
         [Required]
         public string name { get; set; }
+
+        [Required]
+        public bool isBottom { get; set; } = true;
     }
 }

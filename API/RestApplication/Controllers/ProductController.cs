@@ -58,6 +58,10 @@ namespace RestApplication.Controllers
             if (subCategory == null)
                 return BadRequest();
 
+            // check if category is a bottom category
+            if (subCategory.isBottom == false)
+                return BadRequest();
+
             // set names for the below objects
             // (it will be easier to search these objects by product name in the database)
             foreach (var item in weight_price)
