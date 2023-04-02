@@ -89,6 +89,22 @@ namespace RestApplication.Controllers
         }
 
 
+        [HttpGet("/api/photoAttachment/getByProductName")]
+        public async Task<IActionResult> GetByProductName([FromQuery] string productName)
+        {
+            if (productName == null)
+                return BadRequest();
+
+            var photo = await service.GetPhotoByProductName(productName);
+
+            if (photo == null)
+                return NotFound();
+
+            return Ok(photo);
+        }
+
+
+
         [HttpDelete("/api/photoAttachment/delete")]
         public async Task<IActionResult> DeletePhotoById([FromQuery] Guid id)
         {

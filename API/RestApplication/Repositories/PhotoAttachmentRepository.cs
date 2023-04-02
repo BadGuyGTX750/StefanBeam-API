@@ -57,6 +57,19 @@ namespace RestApplication.Repositories
         }
 
 
+        public async Task<PhotoAttachmentModel> GetPhotoProductName(string name)
+        {
+            try
+            {
+                return await dbContext.photoAttachments.Where(u => u.productName == name).FirstAsync();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<PhotoAttachmentModel> GetPhotoByProductName(string name)
         {
             try
