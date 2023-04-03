@@ -72,7 +72,7 @@ namespace RestApplication.Controllers
             // and for that we need the filePath from which to delete
 
             PhotoAttachmentModel photoAttachmentToAdd = new PhotoAttachmentModel();
-            photoAttachmentToAdd.name = fileName;
+            photoAttachmentToAdd.name = file.name;
             photoAttachmentToAdd.parentProductId = product.id;
             photoAttachmentToAdd.product = product;
             photoAttachmentToAdd.productName = product.name;
@@ -101,6 +101,18 @@ namespace RestApplication.Controllers
                 return NotFound();
 
             return Ok(photo);
+        }
+
+
+        [HttpPost("/api/photoAttachment/download")]
+        public async Task<IActionResult> Download([FromQuery] string name, [FromQuery] string ext)
+        {
+            Byte[] b;
+            string tmp = projectPaths.ProductImagesPath;
+            string fileName = name + "." + ext;
+            tmp += "\\" + fileName;
+            b = await System.IO.File.ReadAllBytesAsync(Path.Combine(webHostEnvironment.ContentRootPath, tmp));
+            return File(b, "image/png");
         }
 
 
