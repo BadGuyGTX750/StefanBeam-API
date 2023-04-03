@@ -104,9 +104,18 @@ namespace RestApplication.Controllers
         }
 
 
-        [HttpPost("/api/photoAttachment/download")]
+        [HttpGet("/api/photoAttachment/download")]
         public async Task<IActionResult> Download([FromQuery] string name, [FromQuery] string ext)
         {
+            // Perform a bit of validation
+            if (name == null || ext == null)
+                return BadRequest();
+
+            var photoRow = await service.GetPhotoAttachmentByName(name);
+            if (photoRow == null)
+                return NotFound();
+
+            // Return the file to the client
             Byte[] b;
             string tmp = projectPaths.ProductImagesPath;
             string fileName = name + "." + ext;
