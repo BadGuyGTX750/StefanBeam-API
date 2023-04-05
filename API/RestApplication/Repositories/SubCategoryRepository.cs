@@ -81,6 +81,19 @@ namespace RestApplication.Repositories
         }
 
 
+        public async Task<List<SubCategoryModel>> GetBottomSubCategories()
+        {
+            try
+            {
+                return await dbContext.subCategories.Where(u => u.isBottom == true).ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<bool> UpdateSubCategory(SubCategoryModel subCategory)
         {
             try

@@ -40,6 +40,12 @@ namespace RestApplication.Repositories
         }
 
 
+        public async Task<List<SubCategoryModel>> GetBottomSubCategories()
+        {
+            return await repository.GetBottomSubCategories();
+        }
+
+
         public async Task<bool> UpdateSubCategory(SubCategoryModel subCategory)
         {
             return await repository.UpdateSubCategory(subCategory);

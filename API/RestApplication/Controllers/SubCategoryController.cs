@@ -104,6 +104,18 @@ namespace RestApplication.Controllers
         }
 
 
+        [HttpGet("/api/subCategory/getBottom")]
+        public async Task<IActionResult> GetBottomSubCategory()
+        {
+            var subc = await service.GetBottomSubCategories();
+
+            if (!subc.Any())
+                return NoContent();
+
+            return Ok(subc);
+        }
+
+
 
         [HttpDelete("/api/subCategory/delete")]
         public async Task<IActionResult> DeleteSubCategoryByName([FromQuery] string name)
