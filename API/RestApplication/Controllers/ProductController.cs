@@ -109,6 +109,18 @@ namespace RestApplication.Controllers
         }
 
 
+        [HttpGet("/api/product/getAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var prods = await service.GetAll();
+
+            if (prods == null || !prods.Any())
+                return NotFound();
+
+            return Ok(prods);
+        }
+
+
         [HttpGet("/api/product/getWeightPricesByProductName")]
         public async Task<IActionResult> GetWeightPricesByProductName([FromQuery] string productName)
         {

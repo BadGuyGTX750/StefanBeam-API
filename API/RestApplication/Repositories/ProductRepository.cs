@@ -68,6 +68,19 @@ namespace RestApplication.Repositories
         }
 
 
+        public async Task<List<ProductModel>> GetAll()
+        {
+            try
+            {
+                return await dbContext.products.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<List<ProductModel>> GetByCategoryName(string categoryName)
         { 
             try
